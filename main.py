@@ -20,13 +20,17 @@ y = funct.y_values(file_path)
 
 # plot:
 fig, ax = plt.subplots()
+
 # args for .hexbin can be found at
 # https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hexbin.html#matplotlib.axes.Axes.hexbin
 graph = ax.hexbin(x, y, C=None, bins='log', gridsize=50, cmap='jet', edgecolors='grey', marginals=False)
 ax.set(xlim=(x_low, x_high), ylim=(y_high, y_low))
 
+# sets colorbar settings
+cb = fig.colorbar(graph, ax=ax, label='counts')
+
+# displays an array of values for the hexagons
 array = collections.PolyCollection.get_array(graph)
-print(collections.PolyCollection.get_sizes(graph))
 print(array)
 
 plt.show()
