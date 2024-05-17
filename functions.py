@@ -1,11 +1,6 @@
 import csv
-import os
-import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
 import tkinter as tk
 from tkinter import filedialog
-import pandas as pd
 
 
 def file_get():
