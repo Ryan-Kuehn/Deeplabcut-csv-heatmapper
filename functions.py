@@ -38,7 +38,7 @@ def what_is_graphed(file_input):
             loop = loop + 1
 
         # Loop to parse the variables row into options for the GUI
-        options = []
+        options = {}
         val_loop = 0
         for val in line:
             parser = val_loop % 3
@@ -48,79 +48,89 @@ def what_is_graphed(file_input):
                 valid = False
 
             if val_loop != 0 and valid:
-                options.append(val)
+                options[val] = str(int(val_loop / 3))
             val_loop = val_loop + 1
-
-            # Nested function to check when an item in the GUI is selected
-
-            def check_list():
-                try:
-                    selected = lb.selection_get()
-                    print('selected:', selected)
-                    top.destroy()
-                    return selected
-                except:
-                    print('no selection')
-
-        # Loop to display the variables row in the GUI
         print(options)
-        top = Tk()
-        lb = Listbox(top)
 
-        lb_loop = 1
-        for val in options:
-            lb.insert(lb_loop, val)
-            lb_loop = lb_loop + 1
-        lb.pack()
+        master = Tk()
+        master.geometry("175x175")
 
-        # Button to finish and return selection
-        but = Button(top, text="Finish", command=check_list)
-        but.pack()
-        top.mainloop()
-        selected = check_list()
-        print(selected)
+        # Tkinter string variable
+        v = StringVar(master, '1')
+
+        # Tracing variable change state
+        def callback(var):
+            print(f"Value changed to {var.get()}")
+        v.trace("w", lambda name, index, mode, var=v: callback(v))
+
+        # Loop is used to create multiple Radio buttons
+        for (text, value) in options.items():
+            Radiobutton(master, text=text, variable=v,
+                        value=value).pack(side=TOP, ipady=5)
+
+        # Infinite loop can be terminated by
+        # keyboard or mouse interrupt
+        # or by any predefined function (destroy())
+        btn1 = Button(master, text="Finish", command=master.quit)
+        btn1.pack(pady=10)
+        master.mainloop()
+        master.destroy()
+        return v.get()
 
 
 # x-value functions
-def graph_minsize_x(file_input):
+def x_locator(var_to_graph):
+    var_to_graph = 3 * int(var_to_graph)
+    var_to_graph = var_to_graph - 1
+    return var_to_graph
+
+
+def graph_minsize_x(file_input, x):
     low = 99999999
     with open(file_input, mode='r') as file:
         next(file)
         next(file)
         next(file)
         for col in csv.reader(file, delimiter=','):
-            if float(col[1]) < low:
-                low = float(col[1])
+            if float(col[x]) < low:
+                low = float(col[x])
                 if low - 50 > 0:
                     low = int(low - 50)
                 else:
                     low = 0
+    print(low)
     return low
 
 
-def graph_maxsize_x(file_input):
+def graph_maxsize_x(file_input, x):
     high = 0
     with open(file_input, mode='r') as file:
         next(file)
         next(file)
         next(file)
         for col in csv.reader(file, delimiter=','):
-            if float(col[1]) > high:
-                high = float(col[1])
+            if float(col[x]) > high:
+                high = float(col[x])
                 high = int(high + 50)
     return high
 
 
 # y-value functions
-def graph_minsize_y(file_input):
+def y_locator(var_to_graph):
+    var_to_graph = 3 * int(var_to_graph)
+    var_to_graph = var_to_graph - 2
+    return var_to_graph
+
+
+def graph_minsize_y(file_input, y):
     low = 99999999
     with open(file_input, mode='r') as file:
         next(file)
         next(file)
         next(file)
         for col in csv.reader(file, delimiter=','):
-            if float(col[2]) < low:
-                low = float(col[2])
+            if float(col[y]) < low:
+                low = float(col[y])
                 if low - 50 > 0:
                     low = int(low - 50)
                 else:
@@ -128,38 +138,38 @@ def graph_minsize_y(file_input):
     return low
 
 
-def graph_maxsize_y(file_input):
+def graph_maxsize_y(file_input, y):
     high = 0
     with open(file_input, mode='r') as file:
         next(file)
         next(file)
         next(file)
         for col in csv.reader(file, delimiter=','):
-            if float(col[2]) > high:
-                high = float(col[2])
+            if float(col[y]) > high:
+                high = float(col[y])
                 high = int(high + 50)
     return high
 
 
 # coordinate functions
-def x_values(file_input):
+def x_values(file_input, x):
     values = []
     with open(file_input, mode='r') as file:
         next(file)
         next(file)
         next(file)
         for col in csv.reader(file, delimiter=','):
-            values.append(int(float(col[1])))
+            values.append(int(float(col[x])))
 
     return values
 
 
-def y_values(file_input):
+def y_values(file_input, y):
     values = []
     with open(file_input, mode='r') as file:
         next(file)
         next(file)
         next(file)
         for col in csv.reader(file, delimiter=','):
-            values.append(int(float(col[2])))
+            values.append(int(float(col[y])))
     return values
