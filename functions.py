@@ -53,7 +53,7 @@ def what_is_graphed(file_input):
         print(options)
 
         master = Tk()
-        master.geometry("175x175")
+        master.geometry("1920x1080")
 
         # Tkinter string variable
         v = StringVar(master, '1')
