@@ -19,9 +19,10 @@ y_high = funct.graph_maxsize_y(file_path, y)
 print(f"y lowest value = {y_low} , y highest value = {y_high}")
 
 plt.style.use('_mpl-gallery-nogrid')
+frame_conv = funct.frames_to_sec()
 # data import from csv
-x = funct.x_values(file_path, x)
-y = funct.y_values(file_path, y)
+x = funct.x_values(file_path, x, frame_conv)
+y = funct.y_values(file_path, y, frame_conv)
 
 # plot:
 fig, ax = plt.subplots()

@@ -2,10 +2,12 @@ import csv
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
+import pandas as pd
 
 """
 file_get: GUI prompt for the path of users CSV
 what_is_graphed: Reads in the users CSV and pulls what to graph
+frames_to_sec: Converts FPS into seconds
 graph_minsize_x: Determines the minimum X value for our graph
 graph_maxsize_x: Determines the maximum X value for our graph
 graph_minsize_y: Determines the minimum Y value for our graph
@@ -53,7 +55,7 @@ def what_is_graphed(file_input):
         print(options)
 
         master = Tk()
-        master.geometry("1920x1080")
+        master.geometry("175x175")
 
         # Tkinter string variable
         v = StringVar(master, '1')
@@ -76,6 +78,16 @@ def what_is_graphed(file_input):
         master.mainloop()
         master.destroy()
         return v.get()
+
+
+def frames_to_sec():
+    convert = input("Convert Output from frame count ot seconds? y/n: ")
+    frame_conv = 0
+    if convert == "y":
+        frame_conv = int(input("Input Frame count: "))
+        return frame_conv
+    else:
+        return frame_conv
 
 
 # x-value functions
@@ -152,24 +164,49 @@ def graph_maxsize_y(file_input, y):
 
 
 # coordinate functions
-def x_values(file_input, x):
+def x_values(file_input, x, frame_conv):
     values = []
     with open(file_input, mode='r') as file:
+        # Skip the first three header rows
         next(file)
         next(file)
         next(file)
-        for col in csv.reader(file, delimiter=','):
-            values.append(int(float(col[x])))
+
+        reader = csv.reader(file, delimiter=',')
+        for i, col in enumerate(reader):
+            # Check if the column index is within bounds for the current row
+            if len(col) > x:
+                # Take the value if row index satisfies the skipping logic
+                if i % (frame_conv + 1) == 0:
+                    try:
+                        values.append(int(float(col[x])))
+                    except ValueError:
+                        print(f"Warning: Non-numeric value at row {i + 1}, column {x}. Skipping...")
+            else:
+                print(f"Warning: Row {i + 1} does not have column {x}. Skipping...")
 
     return values
 
 
-def y_values(file_input, y):
+def y_values(file_input, y, frame_conv):
     values = []
     with open(file_input, mode='r') as file:
+        # Skip the first three header rows
         next(file)
         next(file)
         next(file)
-        for col in csv.reader(file, delimiter=','):
-            values.append(int(float(col[y])))
+
+        reader = csv.reader(file, delimiter=',')
+        for i, col in enumerate(reader):
+            # Check if the column index is within bounds for the current row
+            if len(col) > y:
+                # Take the value if row index satisfies the skipping logic
+                if i % (frame_conv + 1) == 0:
+                    try:
+                        values.append(int(float(col[y])))
+                    except ValueError:
+                        print(f"Warning: Non-numeric value at row {i + 1}, column {y}. Skipping...")
+            else:
+                print(f"Warning: Row {i + 1} does not have column {y}. Skipping...")
+
     return values
