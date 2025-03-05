@@ -5,17 +5,43 @@ from tkinter import *
 import pandas as pd
 
 """
-file_get: GUI prompt for the path of users CSV
-what_is_graphed: Reads in the users CSV and pulls what to graph
-frames_to_sec: Converts FPS into seconds
-graph_minsize_x: Determines the minimum X value for our graph
-graph_maxsize_x: Determines the maximum X value for our graph
-graph_minsize_y: Determines the minimum Y value for our graph
-graph_maxsize_y: Determines the maximum Y value for our graph
-x_values: Compiles our x values into a list
-y_values: Compiles our Y values into a list
+                                                   DEVELOPMENT NOTES                                                   
+Finish flip_check function
+    needs x flip logic
+    needs y flip logic
+
+GUI for whole process?
+
+Upload to SUN lab github
+"""
+
 
 """
+                                                Function Table of Contents
+flip_check: Prompts user if they want to mirror points over x or y axis. useful for reorienting graphs
+file_get: GUI prompt for the path of users CSV
+what_is_graphed: Reads in the users CSV and pulls what to graph, user then selects from options
+frames_to_sec: Converts FPS into seconds
+x_locator: finds column of x values within CSV
+graph_minsize_x: Determines the minimum X value for our graph, used for auto scaling graph size, buffer of 100 pixels
+graph_maxsize_x: Determines the maximum X value for our graph, used for auto scaling graph size, buffer of 100 pixels
+y_locator: finds column of y values within CSV
+graph_minsize_y: Determines the minimum Y value for our graph, used for auto scaling graph size, buffer of 100 pixels
+graph_maxsize_y: Determines the maximum Y value for our graph, used for auto scaling graph size, buffer of 100 pixels
+x_values: Compiles our x values into a list
+y_values: Compiles our Y values into a list
+"""
+
+
+def flip_check():
+    prompt = input("Would you like to mirror over x-axis or y-axis? enter 'x', 'y', or hit 'enter' to skip: ")
+
+    if prompt == 'x':
+        return 'x'
+    if prompt == 'y':
+        return 'y'
+    else:
+        return False
 
 
 def file_get():
@@ -107,7 +133,7 @@ def graph_minsize_x(file_input, x):
             if float(col[x]) < low:
                 low = float(col[x])
                 if low - 50 > 0:
-                    low = int(low - 50)
+                    low = int(low - 100)
                 else:
                     low = 0
     print(low)
@@ -123,7 +149,7 @@ def graph_maxsize_x(file_input, x):
         for col in csv.reader(file, delimiter=','):
             if float(col[x]) > high:
                 high = float(col[x])
-                high = int(high + 50)
+                high = int(high + 100)
     return high
 
 
@@ -144,7 +170,7 @@ def graph_minsize_y(file_input, y):
             if float(col[y]) < low:
                 low = float(col[y])
                 if low - 50 > 0:
-                    low = int(low - 50)
+                    low = int(low - 100)
                 else:
                     low = 0
     return low
@@ -159,7 +185,7 @@ def graph_maxsize_y(file_input, y):
         for col in csv.reader(file, delimiter=','):
             if float(col[y]) > high:
                 high = float(col[y])
-                high = int(high + 50)
+                high = int(high + 100)
     return high
 
 

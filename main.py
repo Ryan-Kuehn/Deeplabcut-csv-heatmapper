@@ -2,6 +2,12 @@ import matplotlib.pyplot as plt
 from matplotlib import collections
 import functions as funct
 
+print("\033[31mWARNING, This code uses several input prompts, meaning YOU will have to type using the keyboard in order"
+      " to answer the prompts, ensure to read all prompts carefully.\n if the code seems like it's frozen, it probably"
+      " requires an input, or the graph is displayed, which will require you to close the graph in order to re-run"
+      " the code.\n If you want to create multiple graphs, run the code multiple times.\n Please ensure that your "
+      "graph is rotated properly I can not do this for you.\033[0m")
+
 
 file_path = funct.file_get()
 var = funct.what_is_graphed(file_path)
@@ -29,7 +35,7 @@ fig, ax = plt.subplots()
 
 # args for .hexbin can be found at
 # https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hexbin.html#matplotlib.axes.Axes.hexbin
-graph = ax.hexbin(x, y, C=None, bins='log', gridsize=50, cmap='jet', edgecolors='grey', marginals=False)
+graph = ax.hexbin(x, y, C=None, bins='log', gridsize=23, cmap='jet', edgecolors='grey', marginals=False)
 ax.set(xlim=(x_low, x_high), ylim=(y_high, y_low))
 
 # sets colorbar settings
